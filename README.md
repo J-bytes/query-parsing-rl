@@ -156,6 +156,9 @@ when μ > 1).
   grouped generation.
 * Smoke test: SFT → DPO sampling → DPO → GRPO → eval end to end for a few steps.
 
+CI (GitHub Actions, `.github/workflows/ci.yml`) runs the same gate as `make check`
+on every push and pull request.
+
 Quality gates: `ruff`, `mypy --strict` (src, tests, scripts), `vulture`, and
 `mutmut` on the maths core (schema, reward, metrics, DPO loss, GRPO
 algorithm). The first mutmut run killed 589 / 684 mutants; the survivors pointed
