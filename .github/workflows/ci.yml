@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    # Same gate as `make check` locally: ruff, mypy --strict, vulture, and the
+    # full pytest suite (unit, property, tiny-model, TRL cross-checks, smoke).
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HYPOTHESIS_PROFILE: ci
+      HF_HUB_DISABLE_PROGRESS_BARS: "1"
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+
+      - name: Install (CPU torch)
+        run: make setup
+
+      # The tiny test model downloads only the Qwen2.5 tokenizer (~11 MB).
+      - name: Cache tokenizer and tiny model
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cache/huggingface
+            .cache/tiny-qwen
+          key: tiny-qwen-${{ hashFiles('src/qprl/tiny_model.py') }}
+
+      - name: Lint
+        run: make lint
+      - name: Type check (mypy --strict)
+        run: make typecheck
+      - name: Dead code (vulture)
+        run: make deadcode
+      - name: Tests
+        run: make test
