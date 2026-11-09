@@ -1,0 +1,24 @@
+{"id": "synthetic-0", "query": "red nike running shoes mens size 10", "label": {"product_type": "running shoes", "brand": "nike", "color": "red", "gender": "men", "size": "10"}}
+{"id": "synthetic-1", "query": "iphone 12 case", "label": {"product_type": "case", "compatible_with": "iphone 12"}}
+{"id": "synthetic-2", "query": "womens leather jacket black", "label": {"product_type": "leather jacket", "gender": "women", "color": "black"}}
+{"id": "synthetic-3", "query": "queen size sheets cotton", "label": {"product_type": "sheets", "size": "queen", "material": "cotton"}}
+{"id": "synthetic-4", "query": "bluetooth speaker under $50", "label": {"product_type": "bluetooth speaker", "price_max": 50}}
+{"id": "synthetic-5", "query": "kids rain boots", "label": {"product_type": "rain boots", "age_group": "kids"}}
+{"id": "synthetic-6", "query": "stainless steel water bottle 32 oz", "label": {"product_type": "water bottle", "material": "stainless steel", "size": "32 oz"}}
+{"id": "synthetic-7", "query": "light strips", "label": {"product_type": "light strips"}}
+{"id": "synthetic-8", "query": "samsung 55 inch tv", "label": {"product_type": "tv", "brand": "samsung", "size": "55 inch"}}
+{"id": "synthetic-9", "query": "baby girl dress pink", "label": {"product_type": "dress", "age_group": "baby", "gender": "women", "color": "pink"}}
+{"id": "synthetic-10", "query": "wooden coffee table", "label": {"product_type": "coffee table", "material": "wooden"}}
+{"id": "synthetic-11", "query": "usb c charger for macbook pro", "label": {"product_type": "usb c charger", "compatible_with": "macbook pro"}}
+{"id": "synthetic-12", "query": "lego star wars sets", "label": {"product_type": "sets", "brand": "lego"}}
+{"id": "synthetic-13", "query": "mens wool socks", "label": {"product_type": "socks", "gender": "men", "material": "wool"}}
+{"id": "synthetic-14", "query": "desk lamp between $20 and $40", "label": {"product_type": "desk lamp", "price_min": 20, "price_max": 40}}
+{"id": "synthetic-15", "query": "yoga mat purple", "label": {"product_type": "yoga mat", "color": "purple"}}
+{"id": "synthetic-16", "query": "unisex hoodie xl", "label": {"product_type": "hoodie", "gender": "unisex", "size": "xl"}}
+{"id": "synthetic-17", "query": "teen girls backpack", "label": {"product_type": "backpack", "age_group": "teen", "gender": "women"}}
+{"id": "synthetic-18", "query": "kitchenaid stand mixer", "label": {"product_type": "stand mixer", "brand": "kitchenaid"}}
+{"id": "synthetic-19", "query": "silicone baking mat", "label": {"product_type": "baking mat", "material": "silicone"}}
+{"id": "synthetic-20", "query": "gaming mouse over $100", "label": {"product_type": "gaming mouse", "price_min": 100}}
+{"id": "synthetic-21", "query": "8x10 area rug gray", "label": {"product_type": "area rug", "size": "8x10", "color": "gray"}}
+{"id": "synthetic-22", "query": "airpods pro case", "label": {"product_type": "case", "compatible_with": "airpods pro"}}
+{"id": "synthetic-23", "query": "adidas soccer cleats boys", "label": {"product_type": "soccer cleats", "brand": "adidas", "gender": "men", "age_group": "kids"}}

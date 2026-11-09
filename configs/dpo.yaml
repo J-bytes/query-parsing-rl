@@ -1,0 +1,48 @@
+# Stage 2: on-policy DPO from the SFT checkpoint.
+seed: 0
+task: query_parsing
+sft_model: runs/sft/best
+dtype: fp32
+precision: bf16-mixed
+gradient_checkpointing: true
+output_dir: runs/dpo
+max_completion_tokens: 96
+# --- pair sampling (qprl.dpo.sample) ---
+sample:
+  k: 8                      # samples per query
+  temperature: 1.0
+  top_p: 1.0
+  batch_size: 32            # prompts per generate call (x k sequences)
+  min_margin: 0.2           # minimum reward gap between chosen and rejected
+  gold_chosen: false        # ablation: gold JSON as chosen when no sample is perfect
+  dtype: bf16
+# --- training (qprl.dpo.train) ---
+beta: 0.1
+label_smoothing: 0.0
+batch_size: 8               # pairs per micro-batch (16 sequences)
+grad_accum: 4               # effective 32 pairs
+epochs: 2
+max_steps: null
+ref_batch_size: 32
+log_every_n_steps: 5
+optim:
+  optimizer: adamw
+  lr: 1.0e-6
+  weight_decay: 0.0
+  warmup_steps: 10
+  lr_schedule: cosine
+  min_lr_ratio: 0.1
+  grad_clip: 1.0
+data:
+  pool: data/processed/dpo.jsonl
+  max_pool: null
+  pairs: data/processed/dpo_pairs.jsonl
+  dev: data/processed/dev.jsonl
+eval:
+  num_dev: 300
+  every_n_steps: 25
+  batch_size: 64
+  monitor: micro_f1
+reward:
+  w_f1: 1.0
+  w_format: 0.2

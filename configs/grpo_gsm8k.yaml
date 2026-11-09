@@ -1,0 +1,19 @@
+# Optional second benchmark: GRPO directly on the instruct model for GSM8K.
+base: grpo.yaml
+task: gsm8k
+init_model: Qwen/Qwen2.5-0.5B-Instruct
+output_dir: runs/grpo_gsm8k
+max_completion_tokens: 384
+prompts_per_step: 8
+num_generations: 8
+micro_batch_size: 8
+max_batches: 200
+data:
+  pool: data/processed/gsm8k/grpo.jsonl
+  dev: data/processed/gsm8k/dev.jsonl
+eval:
+  num_dev: 200
+  batch_size: 32
+  monitor: accuracy
+reward:
+  w_format: 0.1

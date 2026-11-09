@@ -1,0 +1,74 @@
+{
+  "advantage_max_abs_diff": {
+    "group": 1.1920928955078125e-07,
+    "batch": 0.0,
+    "none": 0.0
+  },
+  "loss": {
+    "grpo/kl_ratio_correction=False": {
+      "trl_loss": -0.024383552372455597,
+      "our_loss": -0.024383515119552612,
+      "loss_abs_diff": 3.725290298461914e-08,
+      "max_grad_abs_diff": 6.705522537231445e-08,
+      "max_grad_abs": 0.08803979307413101,
+      "clip_fraction": 0.20967741310596466
+    },
+    "grpo/kl_ratio_correction=True": {
+      "trl_loss": -0.02489355206489563,
+      "our_loss": -0.02489352971315384,
+      "loss_abs_diff": 2.2351741790771484e-08,
+      "max_grad_abs_diff": 6.332993507385254e-08,
+      "max_grad_abs": 0.08867724984884262,
+      "clip_fraction": 0.20967741310596466
+    },
+    "bnpo/kl_ratio_correction=False": {
+      "trl_loss": 0.11528520286083221,
+      "our_loss": 0.115285225212574,
+      "loss_abs_diff": 2.2351741790771484e-08,
+      "max_grad_abs_diff": 8.940696716308594e-08,
+      "max_grad_abs": 0.11359944194555283,
+      "clip_fraction": 0.20967741310596466
+    },
+    "bnpo/kl_ratio_correction=True": {
+      "trl_loss": 0.11488117277622223,
+      "our_loss": 0.11488120257854462,
+      "loss_abs_diff": 2.9802322387695312e-08,
+      "max_grad_abs_diff": 8.940696716308594e-08,
+      "max_grad_abs": 0.1144220307469368,
+      "clip_fraction": 0.20967741310596466
+    },
+    "dr_grpo/kl_ratio_correction=False": {
+      "trl_loss": 0.07445503026247025,
+      "our_loss": 0.07445504516363144,
+      "loss_abs_diff": 1.4901161193847656e-08,
+      "max_grad_abs_diff": 4.470348358154297e-08,
+      "max_grad_abs": 0.07336629182100296,
+      "clip_fraction": 0.20967741310596466
+    },
+    "dr_grpo/kl_ratio_correction=True": {
+      "trl_loss": 0.07419408857822418,
+      "our_loss": 0.07419411092996597,
+      "loss_abs_diff": 2.2351741790771484e-08,
+      "max_grad_abs_diff": 5.21540641784668e-08,
+      "max_grad_abs": 0.07389755547046661,
+      "clip_fraction": 0.20967741310596466
+    },
+    "dapo/kl_ratio_correction=False": {
+      "trl_loss": 0.11528520286083221,
+      "our_loss": 0.115285225212574,
+      "loss_abs_diff": 2.2351741790771484e-08,
+      "max_grad_abs_diff": 8.940696716308594e-08,
+      "max_grad_abs": 0.11359944194555283,
+      "clip_fraction": 0.20967741310596466
+    },
+    "dapo/kl_ratio_correction=True": {
+      "trl_loss": 0.11488117277622223,
+      "our_loss": 0.11488120257854462,
+      "loss_abs_diff": 2.9802322387695312e-08,
+      "max_grad_abs_diff": 8.940696716308594e-08,
+      "max_grad_abs": 0.1144220307469368,
+      "clip_fraction": 0.20967741310596466
+    }
+  },
+  "position_ids_effect_left_padded": 1.9073486328125e-06
+}

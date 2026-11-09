@@ -1,0 +1,12 @@
+# Optional: Qwen2.5-1.5B-Instruct on one 24GB GPU. fp32 master weights + AdamW
+# would need ~24 GB before activations, so: bf16 weights and 8-bit AdamW
+# (`uv sync --extra gpu --extra bnb`). bf16 weights lose small updates; keep lr >= 1e-5.
+base: sft.yaml
+model: Qwen/Qwen2.5-1.5B-Instruct
+dtype: bf16
+precision: bf16-true
+output_dir: runs/sft_1p5b
+batch_size: 8
+grad_accum: 8
+optim:
+  optimizer: adamw8bit

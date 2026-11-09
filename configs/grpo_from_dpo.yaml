@@ -1,0 +1,4 @@
+# Optional: the full SFT -> DPO -> GRPO chain.
+base: grpo.yaml
+init_model: runs/dpo/best
+output_dir: runs/sft_dpo_grpo

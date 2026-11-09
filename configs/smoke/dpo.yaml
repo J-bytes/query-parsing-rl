@@ -1,0 +1,17 @@
+base: ../dpo.yaml
+sft_model: runs/smoke/sft/last
+output_dir: runs/smoke/dpo
+gradient_checkpointing: false
+max_completion_tokens: 24
+sample: {k: 4, batch_size: 4, min_margin: 0.0, gold_chosen: true, dtype: fp32}
+batch_size: 2
+grad_accum: 1
+max_steps: 3
+ref_batch_size: 4
+log_every_n_steps: 1
+data:
+  pool: tests/fixtures/queries.jsonl
+  max_pool: 8
+  pairs: runs/smoke/dpo/pairs.jsonl
+  dev: tests/fixtures/queries.jsonl
+eval: {num_dev: 4, every_n_steps: 2, batch_size: 4}

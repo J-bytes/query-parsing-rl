@@ -1,0 +1,139 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "qprl"
+version = "0.1.0"
+description = "SFT -> DPO -> GRPO (from scratch) for e-commerce query parsing with a small Qwen model"
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { text = "Apache-2.0" }
+# torch is NOT listed here: pick exactly one of the `cpu` / `gpu` extras
+# (`make setup` = CPU, `make setup-gpu` = CUDA). See [tool.uv] below.
+dependencies = [
+    "transformers>=5.0",
+    "accelerate>=1.0",
+    "lightning>=2.5",
+    "omegaconf>=2.3",
+    "tensorboard>=2.17",
+    "pandas>=2.2",
+    "pyarrow>=16",
+    "httpx>=0.27",
+    "datasets>=3.0",
+    "matplotlib>=3.9",
+]
+
+[project.optional-dependencies]
+cpu = ["torch>=2.8"]
+# PyPI Linux torch wheels bundle CUDA, so the GPU extra just uses PyPI.
+gpu = ["torch>=2.8"]
+# 8-bit AdamW, only for the optional 1.5B configs (GPU only).
+bnb = ["bitsandbytes>=0.45"]
+wandb = ["wandb>=0.18"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "hypothesis>=6.100",
+    "mypy>=1.13",
+    "ruff>=0.8",
+    "vulture>=2.13",
+    "mutmut>=3.2",
+    "pandas-stubs",
+    # TRL is only used by the cross-check scripts and tests, never by the pipeline.
+    "trl>=1.0",
+]
+
+[tool.uv]
+conflicts = [[{ extra = "cpu" }, { extra = "gpu" }]]
+default-groups = ["dev"]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", extra = "cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/qprl"]
+
+# ---------------------------------------------------------------- tooling ----
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "SIM", "RUF", "PL", "PT", "C4", "PIE", "RET", "ARG"]
+ignore = [
+    "PLR0913",  # ML entry points legitimately take many arguments
+    "PLR2004",  # magic numbers are fine in tests and thresholds
+    "PLR0912",
+    "PLR0915",
+    "N812",     # `import torch.nn.functional as F` is the convention
+    "N806",     # tensor shape names like B, T, G
+    "RUF001",
+    "PLR0917",  # same as PLR0913
+    "ARG002",   # Lightning / HF hook signatures fix the argument list
+    "PLC0415",  # heavy ML imports are deferred on purpose (fast CLI start, optional TRL)
+    "E501",     # formatter owns line length; long strings in docs are fine
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ARG", "PLR", "PT018"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+mypy_path = "src"
+files = ["src", "tests", "scripts"]
+warn_unreachable = true
+# Third-party ML libs ship partial or no types; we keep our own code strict.
+[[tool.mypy.overrides]]
+module = [
+    "transformers.*", "datasets.*", "trl.*", "lightning.*", "omegaconf.*",
+    "pyarrow.*", "matplotlib.*", "bitsandbytes.*", "wandb.*", "torch.utils.tensorboard.*",
+]
+ignore_missing_imports = true
+follow_imports = "skip"
+
+# Lightning is skipped above (untyped), so LightningModule/Callback are `Any`.
+# Subclassing them is the whole point of these modules.
+[[tool.mypy.overrides]]
+module = ["qprl.training", "qprl.sft.train", "qprl.dpo.train", "qprl.grpo.train"]
+disallow_subclassing_any = false
+
+# torch 2.15 leaves Tensor.backward unannotated; tests call it constantly.
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_calls = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+    "slow: builds a tiny random model and runs real forward/backward passes (CPU, seconds each)",
+    "trl: cross-checks against TRL",
+]
+
+[tool.vulture]
+paths = ["src", "vulture_whitelist.py"]
+min_confidence = 70
+
+[tool.mutmut]
+# Mutation testing targets the pure, fully unit-tested core: metrics, reward,
+# schema and the DPO/GRPO loss maths. Training loops are covered by smoke tests.
+source_paths = ["src"]
+only_mutate = [
+    "*src/qprl/schema.py",
+    "*src/qprl/reward.py",
+    "*src/qprl/eval/metrics.py",
+    "*src/qprl/dpo/loss.py",
+    "*src/qprl/grpo/algorithm.py",
+]
+also_copy = ["tests", "configs"]
+pytest_add_cli_args_test_selection = ["-m", "not slow and not trl", "-p", "no:cacheprovider"]

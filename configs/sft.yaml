@@ -1,0 +1,35 @@
+# Stage 1: SFT. Full-parameter fine-tuning of Qwen2.5-0.5B-Instruct.
+# Effective batch = batch_size * grad_accum = 64 sequences.
+seed: 0
+task: query_parsing
+model: Qwen/Qwen2.5-0.5B-Instruct
+dtype: fp32                 # master weights; `precision` runs matmuls in bf16
+precision: bf16-mixed       # falls back to 32-true on CPU
+gradient_checkpointing: true
+output_dir: runs/sft
+max_completion_tokens: 96   # longest canonical label is ~60 tokens
+batch_size: 16
+grad_accum: 4
+epochs: 2
+max_steps: null             # set to cap; otherwise epochs * steps_per_epoch
+log_every_n_steps: 10
+optim:
+  optimizer: adamw          # adamw8bit for the 1.5B config
+  lr: 1.0e-5
+  weight_decay: 0.0
+  warmup_steps: 20
+  lr_schedule: cosine
+  min_lr_ratio: 0.1
+  grad_clip: 1.0
+data:
+  train: data/processed/sft.jsonl
+  dev: data/processed/dev.jsonl
+  max_train: null
+eval:
+  num_dev: 300
+  every_n_steps: 50
+  batch_size: 64
+  monitor: micro_f1
+reward:
+  w_f1: 1.0
+  w_format: 0.2

@@ -1,0 +1,11 @@
+base: ../sft.yaml
+model: .cache/tiny-qwen
+output_dir: runs/smoke/sft
+gradient_checkpointing: false
+batch_size: 4
+grad_accum: 1
+max_steps: 3
+max_completion_tokens: 24
+log_every_n_steps: 1
+data: {train: tests/fixtures/queries.jsonl, dev: tests/fixtures/queries.jsonl}
+eval: {num_dev: 4, every_n_steps: 2, batch_size: 4}

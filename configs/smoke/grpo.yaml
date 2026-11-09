@@ -1,0 +1,12 @@
+base: ../grpo.yaml
+init_model: runs/smoke/sft/last
+output_dir: runs/smoke/grpo
+gradient_checkpointing: false
+max_completion_tokens: 16
+prompts_per_step: 2
+num_generations: 4
+micro_batch_size: 4
+max_batches: 2
+log_rollouts_every: 1
+data: {pool: tests/fixtures/queries.jsonl, dev: tests/fixtures/queries.jsonl}
+eval: {num_dev: 4, every_n_steps: 2, batch_size: 4}
